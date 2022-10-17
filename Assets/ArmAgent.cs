@@ -46,10 +46,19 @@ public class ArmAgent : Agent
         //But the more you add, the more difficult it is for the agent to figure out what's important!
 
         //sensor.AddObservation(armRb.transform.position + Target.position); //Vector between two points
-        //sensor.AddObservation(Target.position);
-        //sensor.AddObservation(this.transform.rotation);
-        //sensor.AddObservation(upperArm.position.y);
-        //sensor.AddObservation(Vector3.Distance(armRb.transform.position, Target.position));
+        // sensor.AddObservation(Target.position);
+        // sensor.AddObservation(this.transform.rotation);
+       
+        // sensor.AddObservation(Vector3.Distance(upperArm.position, Target.position));
+
+        // ----- Helpful notes for TAs
+        // These are by far the best observations to make. 
+        // If you do this along with reward closer to zero it should start figuring out the problem within the first minute of training (<10000 steps)
+        // The attached model is not perfect, but was only trained for 50000 steps (~5m)
+        sensor.AddObservation(getYAngleToTarget());
+        sensor.AddObservation(getXAngleToTarget());
+        sensor.AddObservation(getZAngleToTarget());
+        sensor.AddObservation(upperArm.position.y);
 
 
     }
@@ -93,6 +102,13 @@ public class ArmAgent : Agent
 
         //TODO: add in rewards for training
 
+        //Start this large ~0.005 and reduce it over time
+        AddReward(RewardCloserToZero(0.0005f, getYAngleToTarget()));
+        AddReward(RewardCloserToZero(0.0005f, getXAngleToTarget()));
+        AddReward(RewardCloserToZero(0.0005f, getZAngleToTarget()));
+        
+
+        AddReward(-0.0001f); //Meeseeks punishment
 
         destination = armRb.transform.rotation * Quaternion.Euler(controlSignal);
         if (destination != null && armRb.transform.rotation != destination)
@@ -103,7 +119,7 @@ public class ArmAgent : Agent
 
         }
     }
-    public float rewardCloserToZero(float reward, float value)
+    public float RewardCloserToZero(float reward, float value)
     {
         if (value != 0)
         {
@@ -118,6 +134,7 @@ public class ArmAgent : Agent
         {
             resetTarget();
             //TODO: What do you want to happen when you hit a target?
+            AddReward(1.0f);
 
         }
         if (collision.collider.tag == "Ground")
@@ -125,7 +142,7 @@ public class ArmAgent : Agent
 
             resetArm();
             //TODO: What do you want to happen when you hit the ground?
-
+            AddReward(-1.0f);
             EndEpisode();
         }
     }
