@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
 
 public class ArmAgent : Agent
 
@@ -81,14 +82,13 @@ public class ArmAgent : Agent
         return Mathf.Atan2(relative.x, relative.y) * Mathf.Rad2Deg;
     }
 
-    public override void OnActionReceived(float[] vectorAction)
-    {
+    public override void OnActionReceived(ActionBuffers actions){
         Vector3 controlSignal = Vector3.zero;
 
 
-        controlSignal.x = vectorAction[0];
-        controlSignal.y = vectorAction[1];
-        controlSignal.z = vectorAction[2];
+        controlSignal.x = actions.ContinuousActions[0];
+        controlSignal.y = actions.ContinuousActions[1];
+        controlSignal.z = actions.ContinuousActions[2];
 
 
         //TODO: add in rewards for training
@@ -145,11 +145,12 @@ public class ArmAgent : Agent
         armRb.angularVelocity = Vector3.zero;
         armRb.velocity = Vector3.zero;
     }
-    public override void Heuristic(float[] actionsOut)
-    {
-        actionsOut[0] = Input.GetAxis("Horizontal");
-        actionsOut[1] = Input.GetAxis("Vertical");
-    }
+    public override void Heuristic(in ActionBuffers actionsOut)
+{
+     ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
+    continuousActions[0] = Input.GetAxis("Horizontal");
+    continuousActions[1] = Input.GetAxis("Vertical");
+}
     Vector3 generateRandomCoordinates()
     {
         float anchorx = 0;
