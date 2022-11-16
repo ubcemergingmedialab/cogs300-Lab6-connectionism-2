@@ -45,6 +45,7 @@
      <Compile Include="Assets\Scripts\CarController.cs" />
      <Compile Include="Assets\Imports\PROMETEO - Car Controller\Scripts\PrometeoCarController.cs" />
      <Compile Include="Assets\Scripts\JumpController.cs" />
+     <Compile Include="Assets\Scripts\CarControlAPI.cs" />
      <None Include="Assets\Imports\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
      <None Include="Assets\Imports\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\Imports\TextMesh Pro\Resources\Fonts &amp; Materials\LiberationSans - OFL.txt" />
