@@ -32,25 +32,21 @@ public class CarControlAPI : MonoBehaviour
         bool right = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
 
         forward = true;
-        float turnAmount = 0;
 
-        if(rightDist != -1 && leftDist != -1){
             if(rightDist > leftDist){
                 right = true;
-                turnAmount = rightDist - leftDist;
             }
             else if(rightDist < leftDist){
                 left = true;
-                turnAmount = leftDist - rightDist;
             }
-        }
 
-        if(rightDist == -1){
-            right = true;
-        }
-        else if(leftDist == -1){
-            left = true;
-        }
+
+        // if(rightDist == -1){
+        //     right = true;
+        // }
+        // else if(leftDist == -1){
+        //     left = true;
+        // }
 
         // if(Input.GetKey(KeyCode.Backspace)){
         //   rBody
@@ -66,10 +62,10 @@ public class CarControlAPI : MonoBehaviour
         }
 
         if(left){
-          controlScript.TurnLeft(turnAmount);
+          controlScript.TurnLeft(1);
         }
         if(right){
-          controlScript.TurnRight(turnAmount);
+          controlScript.TurnRight(1);
         }
         if(Input.GetKey(KeyCode.Space)){
           
@@ -110,7 +106,7 @@ public class CarControlAPI : MonoBehaviour
         else
         {
             Debug.DrawRay(transform.position, direction * 1000, Color.red);
-            return -1;
+            return 1000f;
         }
     }
 }
