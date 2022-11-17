@@ -450,7 +450,7 @@ public class PrometeoCarController : MonoBehaviour
         // }
         // if(!(forward || backward)){
         //   ThrottleOff();
-        // }
+        // } var dir = Quaternion.Euler(0,yourAngleInDegree,0) * transform.forward;
         // if(!backward && !forward && !Input.GetKey(KeyCode.Space) && !deceleratingCar){
         //   InvokeRepeating("DecelerateCar", 0f, 0.1f);
         //   deceleratingCar = true;
@@ -538,14 +538,14 @@ public class PrometeoCarController : MonoBehaviour
     //STEERING METHODS
     //
     //The following method turns the front car wheels to the left. The speed of this movement will depend on the steeringSpeed variable.
-    public void TurnLeft()
+    public void TurnLeft(float amount)
     {
         steeringAxis = steeringAxis - (Time.deltaTime * 10f * steeringSpeed);
         if (steeringAxis < -1f)
         {
             steeringAxis = -1f;
         }
-        var steeringAngle = steeringAxis * maxSteeringAngle;
+        var steeringAngle = steeringAxis * maxSteeringAngle * amount;
         frontLeftCollider.steerAngle =
             Mathf
                 .Lerp(frontLeftCollider.steerAngle,
@@ -559,7 +559,7 @@ public class PrometeoCarController : MonoBehaviour
     }
 
     //The following method turns the front car wheels to the right. The speed of this movement will depend on the steeringSpeed variable.
-    public void TurnRight()
+    public void TurnRight(float amount)
     {
         steeringAxis = steeringAxis + (Time.deltaTime * 10f * steeringSpeed);
         if (steeringAxis > 1f)
