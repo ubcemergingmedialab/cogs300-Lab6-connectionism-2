@@ -7,6 +7,7 @@ public class CarControlAPI : MonoBehaviour
     // Start is called before the first frame update
 
     PrometeoCarController controlScript;
+    bool forward, backward, left, right, drift;
 
     void Awake(){
         controlScript = GetComponent<PrometeoCarController>();
@@ -19,42 +20,44 @@ public class CarControlAPI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       
+
+        
+        //keyboardMovement();
+        raycastMovement();
+
+
+        movementExecution();            
+    }
+
+    void keyboardMovement(){
+      forward = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
+      backward = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
+      left = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
+      right = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
+    }
+
+    void raycastMovement(){
+        forward = true;
+        right = false;
+        left = false;
 
         float rightDist = Raycast(45);
         float leftDist = Raycast(-45);
 
+        if(rightDist > leftDist){
+            right = true;
+        }
+        else if(rightDist < leftDist){
+            left = true;
+        }
+       
+    }
 
 
 
-        bool forward = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
-        bool backward = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
-        bool left = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
-        bool right = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
-
-        forward = true;
-
-            if(rightDist > leftDist){
-                right = true;
-            }
-            else if(rightDist < leftDist){
-                left = true;
-            }
-
-
-        // if(rightDist == -1){
-        //     right = true;
-        // }
-        // else if(leftDist == -1){
-        //     left = true;
-        // }
-
-        // if(Input.GetKey(KeyCode.Backspace)){
-        //   rBody
-        //         .AddForce(transform.forward,
-        //         ForceMode.VelocityChange);
-        // }
-
-        if(forward){
+    void movementExecution(){
+       if(forward){
             controlScript.GoForward();
         }
         if(backward){
@@ -67,17 +70,10 @@ public class CarControlAPI : MonoBehaviour
         if(right){
           controlScript.TurnRight(1);
         }
-        if(Input.GetKey(KeyCode.Space)){
-          
-          controlScript.Handbrake();
-        }
-        if(Input.GetKeyUp(KeyCode.Space)){
-          controlScript.RecoverTraction();
-        }
         if(!(forward || backward)){
           controlScript.ThrottleOff();
         }
-        if(!backward && !forward && !Input.GetKey(KeyCode.Space)){
+        if(!backward && !forward && drift){
           controlScript.reduceSpeedOverTime();
         }
         if(!left && !right){
@@ -86,13 +82,6 @@ public class CarControlAPI : MonoBehaviour
     }
 
     float Raycast(float angleOffset){
-
-        int layerMask = 1 << 8;
-
-        // This would cast rays only against colliders in layer 8.
-        // But instead we want to collide against everything except layer 8. The ~ operator does this, it inverts a bitmask.
-        layerMask = ~layerMask;
-
 
         var direction = Quaternion.Euler(0,angleOffset,0) * transform.forward;
 
