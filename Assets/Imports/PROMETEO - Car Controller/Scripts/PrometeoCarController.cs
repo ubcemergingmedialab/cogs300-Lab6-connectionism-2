@@ -537,9 +537,20 @@ public class PrometeoCarController : MonoBehaviour
     //
     //STEERING METHODS
     //
+
+    public void Turn(float amount){
+        if(amount < 0){
+            TurnLeft(Math.Abs(amount));
+        }
+        else if (amount > 0){
+            TurnRight(Math.Abs(amount));
+        }
+        
+    }
     //The following method turns the front car wheels to the left. The speed of this movement will depend on the steeringSpeed variable.
     public void TurnLeft(float amount)
     {
+        amount = Mathf.Clamp(amount, -1f, 1f);
         steeringAxis = steeringAxis - (Time.deltaTime * 10f * steeringSpeed);
         if (steeringAxis < -1f)
         {
@@ -561,12 +572,13 @@ public class PrometeoCarController : MonoBehaviour
     //The following method turns the front car wheels to the right. The speed of this movement will depend on the steeringSpeed variable.
     public void TurnRight(float amount)
     {
+        amount = Mathf.Clamp(amount, -1f, 1f);
         steeringAxis = steeringAxis + (Time.deltaTime * 10f * steeringSpeed);
         if (steeringAxis > 1f)
         {
             steeringAxis = 1f;
         }
-        var steeringAngle = steeringAxis * maxSteeringAngle;
+        var steeringAngle = steeringAxis * maxSteeringAngle * amount;
         frontLeftCollider.steerAngle =
             Mathf
                 .Lerp(frontLeftCollider.steerAngle,
@@ -648,11 +660,21 @@ public class PrometeoCarController : MonoBehaviour
         }
     }
 
+
+    public void GoForwardBackward(float amount){
+        amount = Mathf.Clamp(amount, -1f, 1f);
+        if(amount > 0){
+            GoForward(amount);
+        }
+        else if(amount < 0){
+            GoReverse(amount);
+        }
+    }
     //
     //ENGINE AND BRAKING METHODS
     //
     // This method apply positive torque to the wheels in order to go forward.
-    public void GoForward()
+    public void GoForward(float amount)
     {
         CancelInvoke("DecelerateCar");
         deceleratingCar = false;
@@ -671,7 +693,7 @@ public class PrometeoCarController : MonoBehaviour
         }
 
         // The following part sets the throttle power to 1 smoothly.
-        throttleAxis = throttleAxis + (Time.deltaTime * 3f);
+        throttleAxis = throttleAxis + (Time.deltaTime * 3f) * amount;
         if (throttleAxis > 1f)
         {
             throttleAxis = 1f;
@@ -720,7 +742,7 @@ public class PrometeoCarController : MonoBehaviour
     }
 
     // This method apply negative torque to the wheels in order to go backwards.
-    public void GoReverse()
+    public void GoReverse(float amount)
     {
         CancelInvoke("DecelerateCar");
         deceleratingCar = false;
