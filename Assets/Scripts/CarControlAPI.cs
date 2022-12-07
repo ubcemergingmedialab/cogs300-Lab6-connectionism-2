@@ -22,21 +22,18 @@ public class CarControlAPI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
-        
-        
         //keyboardMovement();
-        PrePlannedMovement();
+        //PrePlannedMovement();
         // raycastLogicMovement();
-        // raycastDynamicMovement();         
+        raycastDynamicMovement();         
     }
 
     void PrePlannedMovement(){
       controlScript.GoForward(1);
 
       if(plannedMovement){
-        float[] instructions = {0, 0, -0.5f, 0, 0, 1, 0.5f, 0, 0,0, -1, -0.3f,0, 0.5f, 0, 0, 0, -0.25f, 0, 1, 0.7f, 0.5f, 0, 0.5f, 0};
-        ExectuteInstructions(instructions, 0.5f);
+        double[] instructions = {0, 0, -0.5, 0, 0, 1, 0.5, 0, 0,0, -1, -0.3,0, 0.5, 0, 0, 0, -0.25, 0, 1, 0.7, 0.5, 0, 0.5, 0};
+        ExectuteInstructions(instructions, 0.5);
         plannedMovement = false;
       }
     }
@@ -51,12 +48,12 @@ public class CarControlAPI : MonoBehaviour
     }
 
     //Takes in an array of instructions and exectutes them one at a time as movement commands (-1 is full left, 1 is full right, 0 is straight), waiting for delay seconds before moving to the next instruction
-    void ExectuteInstructions(float[] instructions, float delay){
+    void ExectuteInstructions(double[] instructions, double delay){
       StartCoroutine(ExecuteInstructionsCoroutine(instructions, delay));
     }
 
 
-    IEnumerator ExecuteInstructionsCoroutine(float[] instructions, float delay){
+    IEnumerator ExecuteInstructionsCoroutine(double[] instructions, double delay){
       int instructionIndex = 0;
       while(instructionIndex < instructions.Length){
         float currDuration = 0;
@@ -64,7 +61,7 @@ public class CarControlAPI : MonoBehaviour
         while(currDuration < delay){
           currDuration += Time.deltaTime;
           Debug.Log(instructions[instructionIndex]);
-          controlScript.Turn(instructions[instructionIndex]);
+          controlScript.Turn((float)instructions[instructionIndex]);
           yield return new WaitForSeconds(0.001f);
         }
         instructionIndex++;
@@ -95,14 +92,14 @@ public class CarControlAPI : MonoBehaviour
     void raycastDynamicMovement(){
         float rightDist = Raycast(35);
         float leftDist = Raycast(-35);
-        float frontDist = Raycast(0);
+        // float frontDist = Raycast(0);
 
 
         rightPower = rightDist.Map(0,20,0.01f,1) / 1;
         leftPower = leftDist.Map(0,20,0.01f,1) / 1;
-        throttlePower = frontDist.Map(0, 15, -0.3f, 1);
+        // throttlePower = frontDist.Map(0, 15, -0.3f, 1);
 
-        controlScript.GoForwardBackward(throttlePower);
+        controlScript.GoForwardBackward(1);
 
         controlScript.Turn((rightPower - leftPower));
     }
