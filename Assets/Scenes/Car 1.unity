@@ -443,7 +443,7 @@ PrefabInstance:
     - target: {fileID: 2239677824950174677, guid: 79d0ca8b77e301442afdb49f102e8aed,
         type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5135156708204615449, guid: 79d0ca8b77e301442afdb49f102e8aed,
         type: 3}
@@ -458,7 +458,7 @@ PrefabInstance:
     - target: {fileID: 7877667524431639919, guid: 79d0ca8b77e301442afdb49f102e8aed,
         type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8615825633152659129, guid: 79d0ca8b77e301442afdb49f102e8aed,
         type: 3}
@@ -468,7 +468,7 @@ PrefabInstance:
     - target: {fileID: 8615825633152659129, guid: 79d0ca8b77e301442afdb49f102e8aed,
         type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8706808774334851022, guid: 79d0ca8b77e301442afdb49f102e8aed,
         type: 3}
@@ -478,7 +478,7 @@ PrefabInstance:
     - target: {fileID: 8706808774334851022, guid: 79d0ca8b77e301442afdb49f102e8aed,
         type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79d0ca8b77e301442afdb49f102e8aed, type: 3}
@@ -1674,7 +1674,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1426467318
 AudioListener:
   m_ObjectHideFlags: 0

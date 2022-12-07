@@ -10,32 +10,35 @@ public class CarControlAPI : MonoBehaviour
     PrometeoCarController controlScript;
     bool forward, backward, left, right, drift;
 
+    bool plannedMovement = true;
+
     void Awake(){
         controlScript = GetComponent<PrometeoCarController>();
     }
     void Start()
     {
-        PrePlannedMovement();
     }
 
     // Update is called once per frame
     void Update()
     {
        
-        controlScript.GoForward(1);
+        
         
         //keyboardMovement();
-        // PrePlannedMovement();
+        PrePlannedMovement();
         // raycastLogicMovement();
         // raycastDynamicMovement();         
     }
 
     void PrePlannedMovement(){
-      
+      controlScript.GoForward(1);
 
-      float[] instructions = {0, 0, -0.5f, 0, 0, 1, 0.5f, 0, 0,0, -1, -0.25f,0, 0.5f, 0, 0, 0, -0.25f, 1, 1, 0.5f, 0.5f, 0};
-
-      ExectuteInstructions(instructions, 0.5f);
+      if(plannedMovement){
+        float[] instructions = {0, 0, -0.5f, 0, 0, 1, 0.5f, 0, 0,0, -1, -0.3f,0, 0.5f, 0, 0, 0, -0.25f, 0, 1, 0.7f, 0.5f, 0, 0.5f, 0};
+        ExectuteInstructions(instructions, 0.5f);
+        plannedMovement = false;
+      }
     }
 
     void keyboardMovement(){
