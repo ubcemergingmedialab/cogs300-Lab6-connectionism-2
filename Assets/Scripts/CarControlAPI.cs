@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,18 +15,27 @@ public class CarControlAPI : MonoBehaviour
     }
     void Start()
     {
-        
+        PrePlannedMovement();
     }
 
     // Update is called once per frame
     void Update()
     {
        
-
+        controlScript.GoForward(1);
         
         //keyboardMovement();
-        //raycastLogicMovement();
-        raycastDynamicMovement();         
+        // PrePlannedMovement();
+        // raycastLogicMovement();
+        // raycastDynamicMovement();         
+    }
+
+    void PrePlannedMovement(){
+      
+
+      float[] instructions = {0, 0, -0.5f, 0, 0, 1, 0.5f, 0, 0,0, -1, -0.25f,0, 0.5f, 0, 0, 0, -0.25f, 1, 1, 0.5f, 0.5f, 0};
+
+      ExectuteInstructions(instructions, 0.5f);
     }
 
     void keyboardMovement(){
@@ -35,6 +45,30 @@ public class CarControlAPI : MonoBehaviour
       right = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
 
       movementExecution();
+    }
+
+    //Takes in an array of instructions and exectutes them one at a time as movement commands (-1 is full left, 1 is full right, 0 is straight), waiting for delay seconds before moving to the next instruction
+    void ExectuteInstructions(float[] instructions, float delay){
+      StartCoroutine(ExecuteInstructionsCoroutine(instructions, delay));
+    }
+
+
+    IEnumerator ExecuteInstructionsCoroutine(float[] instructions, float delay){
+      int instructionIndex = 0;
+      while(instructionIndex < instructions.Length){
+        float currDuration = 0;
+        
+        while(currDuration < delay){
+          currDuration += Time.deltaTime;
+          Debug.Log(instructions[instructionIndex]);
+          controlScript.Turn(instructions[instructionIndex]);
+          yield return new WaitForSeconds(0.001f);
+        }
+        instructionIndex++;
+      }
+    }
+    void Backward(){
+      controlScript.GoReverse(1);
     }
 
     void raycastLogicMovement(){
@@ -56,8 +90,6 @@ public class CarControlAPI : MonoBehaviour
     public float leftPower;
     public float throttlePower;
     void raycastDynamicMovement(){
-        
-
         float rightDist = Raycast(35);
         float leftDist = Raycast(-35);
         float frontDist = Raycast(0);

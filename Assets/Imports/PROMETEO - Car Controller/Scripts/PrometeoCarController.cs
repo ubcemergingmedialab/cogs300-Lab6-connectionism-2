@@ -539,7 +539,7 @@ public class PrometeoCarController : MonoBehaviour
     //
 
     public void Turn(float amount){
-        if(amount < 0){
+        if(amount <= 0){
             TurnLeft(Math.Abs(amount));
         }
         else if (amount > 0){
