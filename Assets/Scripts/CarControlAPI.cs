@@ -25,7 +25,8 @@ public class CarControlAPI : MonoBehaviour
         //keyboardMovement();
         //PrePlannedMovement();
         // raycastLogicMovement();
-        raycastDynamicMovement();         
+        //raycastDynamicMovement();
+        didabotMovement();         
     }
 
     void PrePlannedMovement(){
@@ -104,6 +105,24 @@ public class CarControlAPI : MonoBehaviour
         controlScript.Turn((rightPower - leftPower));
     }
 
+    void didabotMovement(){
+        float sensorDist = 10.0f;
+        string rightTag1;
+        string leftTag1;
+        string rightTag2;
+        string leftTag2;
+        float rightSensor1 = ShortRaycast(45, sensorDist, out rightTag1);
+        float rightSensor2 = ShortRaycast(90, sensorDist, out rightTag2);
+        float leftSensor1 = ShortRaycast(-45, sensorDist, out leftTag1);
+        float leftSensor2 = ShortRaycast(-90, sensorDist, out leftTag2);
+
+        controlScript.GoForwardBackward(1);
+
+        float turn = leftSensor1 + leftSensor2 - rightSensor1 - rightSensor2;
+
+        controlScript.Turn((turn));
+    }
+
 
 
     void movementExecution(){
@@ -150,6 +169,31 @@ public class CarControlAPI : MonoBehaviour
             return 1000f;
         }
     }
+
+    float ShortRaycast(float yAngleOffset, float distance, out string tag){
+
+        var direction = Quaternion.Euler(0,yAngleOffset,0) * transform.forward;
+        var position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+
+        tag = "";
+
+        RaycastHit hit;
+        // Does the ray intersect any objects excluding the player layer
+        if (Physics.Raycast(position, direction, out hit, distance))
+        {
+            Debug.DrawRay(position, direction * hit.distance, Color.yellow);
+            tag = hit.transform.tag;
+            //return (distance - hit.distance) / distance;
+            return 1.0f;
+        }
+        else
+        {
+            Debug.DrawRay(position, direction * distance, Color.red);
+            return 0.0f;
+        }
+    }
+
+    
 }
 
 
