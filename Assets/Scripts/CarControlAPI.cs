@@ -7,26 +7,45 @@ public class CarControlAPI : MonoBehaviour
 {
     // Start is called before the first frame update
 
+    #region Variables
     PrometeoCarController controlScript;
-    bool forward, backward, left, right, drift;
+
+    private float rightPower;
+    private float leftPower;
+    private float throttlePower;
+
+    public bool keyboard, turing, pss, dynamic;
 
     bool plannedMovement = true;
 
+    #endregion
+
+    #region Built In
     void Awake(){
         controlScript = GetComponent<PrometeoCarController>();
-    }
-    void Start()
-    {
     }
 
     // Update is called once per frame
     void Update()
     {
-        //keyboardMovement();
-        //PrePlannedMovement();
-        // raycastLogicMovement();
-        raycastDynamicMovement();         
+        if(keyboard){
+          KeyboardMovement();
+        }
+        else if(turing){
+          PrePlannedMovement();
+        }
+        else if (pss){
+          RaycastLogicMovement();
+        }
+        else if (dynamic){
+          RaycastDynamicMovement(); 
+        }     
     }
+
+    #endregion
+
+    #region Movement Controls
+    // ---------- PRE-PLANNED TURING ------------
 
     void PrePlannedMovement(){
       controlScript.GoForward(1);
@@ -36,42 +55,33 @@ public class CarControlAPI : MonoBehaviour
         ExectuteInstructions(instructions, 0.5);
         plannedMovement = false;
       }
-    }
 
-    void keyboardMovement(){
-      forward = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
-      backward = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
-      left = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
-      right = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
+       void ExectuteInstructions(double[] instructions, double delay){
+          StartCoroutine(ExecuteInstructionsCoroutine(instructions, delay));
 
-      movementExecution();
-    }
-
-    //Takes in an array of instructions and exectutes them one at a time as movement commands (-1 is full left, 1 is full right, 0 is straight), waiting for delay seconds before moving to the next instruction
-    void ExectuteInstructions(double[] instructions, double delay){
-      StartCoroutine(ExecuteInstructionsCoroutine(instructions, delay));
-    }
-
-
-    IEnumerator ExecuteInstructionsCoroutine(double[] instructions, double delay){
-      int instructionIndex = 0;
-      while(instructionIndex < instructions.Length){
-        float currDuration = 0;
-        
-        while(currDuration < delay){
-          currDuration += Time.deltaTime;
-          Debug.Log(instructions[instructionIndex]);
-          controlScript.Turn((float)instructions[instructionIndex]);
-          yield return new WaitForSeconds(0.001f);
+            IEnumerator ExecuteInstructionsCoroutine(double[] instructions, double delay){
+              int instructionIndex = 0;
+              while(instructionIndex < instructions.Length){
+                float currDuration = 0;
+                
+                while(currDuration < delay){
+                  currDuration += Time.deltaTime;
+                  Debug.Log(instructions[instructionIndex]);
+                  controlScript.Turn((float)instructions[instructionIndex]);
+                  yield return new WaitForSeconds(0.001f);
+                }
+                instructionIndex++;
+              }
+            }
         }
-        instructionIndex++;
-      }
     }
-    void Backward(){
-      controlScript.GoReverse(1);
-    }
+    //Takes in an array of instructions and exectutes them one at a time as movement commands (-1 is full left, 1 is full right, 0 is straight), waiting for delay seconds before moving to the next instruction
+   
+    
+    
+    // ------------------ LOGIC PSS ---------------
 
-    void raycastLogicMovement(){
+    void RaycastLogicMovement(){
         controlScript.GoForward(1);
 
         float rightDist = Raycast(45);
@@ -86,27 +96,32 @@ public class CarControlAPI : MonoBehaviour
     }
 
 
-    public float rightPower;
-    public float leftPower;
-    public float throttlePower;
-    void raycastDynamicMovement(){
+    // ---------- DYNAMIC -------------------
+
+    void RaycastDynamicMovement(){
         float rightDist = Raycast(35);
         float leftDist = Raycast(-35);
-        // float frontDist = Raycast(0);
+        float frontDist = Raycast(0);
 
 
         rightPower = rightDist.Map(0,20,0.01f,1) / 1;
         leftPower = leftDist.Map(0,20,0.01f,1) / 1;
-        // throttlePower = frontDist.Map(0, 15, -0.3f, 1);
+        throttlePower = frontDist.Map(0, 15, -0.3f, 1);
 
-        controlScript.GoForwardBackward(1);
+        controlScript.GoForwardBackward(throttlePower);
 
         controlScript.Turn((rightPower - leftPower));
     }
 
+    // ------------- KEYBOARD --------------
+    void KeyboardMovement(){
+      bool forward = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
+      bool backward = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
+      bool left = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
+      bool right = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
 
-
-    void movementExecution(){
+      movementExecution(forward, backward, left, right);
+      void movementExecution(bool forward, bool backward, bool left, bool right){
        if(forward){
             controlScript.GoForward(1);
         }
@@ -123,13 +138,20 @@ public class CarControlAPI : MonoBehaviour
         if(!(forward || backward)){
           controlScript.ThrottleOff();
         }
-        if(!backward && !forward && drift){
-          controlScript.reduceSpeedOverTime();
-        }
+        // if(!backward && !forward && drift){
+        //   controlScript.reduceSpeedOverTime();
+        // }
         if(!left && !right){
           controlScript.ResetSteeringAngle();
         }
     }
+    }
+
+
+
+    #endregion
+
+    #region Utilities
 
 
     float Raycast(float yAngleOffset){
@@ -150,6 +172,8 @@ public class CarControlAPI : MonoBehaviour
             return 1000f;
         }
     }
+
+    #endregion
 }
 
 

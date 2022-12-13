@@ -393,7 +393,7 @@ PrefabInstance:
     - target: {fileID: 261786959625234688, guid: 79d0ca8b77e301442afdb49f102e8aed,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.5
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 261786959625234688, guid: 79d0ca8b77e301442afdb49f102e8aed,
         type: 3}
@@ -433,7 +433,7 @@ PrefabInstance:
     - target: {fileID: 642287924342879162, guid: 79d0ca8b77e301442afdb49f102e8aed,
         type: 3}
       propertyPath: m_Name
-      value: Prometheus
+      value: Car
       objectReference: {fileID: 0}
     - target: {fileID: 2239677824950174677, guid: 79d0ca8b77e301442afdb49f102e8aed,
         type: 3}
@@ -2394,9 +2394,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e73978e3c876bc40a6eb9ea972eec5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightPower: 0
-  leftPower: 0
-  throttlePower: 0
+  keyboard: 0
+  turing: 0
+  pss: 0
+  dynamic: 1
 --- !u!4 &2011194824 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 261786959625234688, guid: 79d0ca8b77e301442afdb49f102e8aed,
