@@ -7,8 +7,8 @@ public class DidabotController : MonoBehaviour
 {
 
     
-    float speed = 20f;
-    float turnSpeed = 200f;
+    float speed = 30f;
+    float turnSpeed = 300f;
 
     private Rigidbody rb;
     // Start is called before the first frame update
@@ -27,10 +27,10 @@ public class DidabotController : MonoBehaviour
 
 
 
-        float frontRightPower = frontRightDist.Map(0,30,0.01f,1) / 1;
-        float frontLeftPower = frontLeftDist.Map(0,30,0.01f,1) / 1;
-        float backRightPower = backRightDist.Map(0,30,0.01f,1) / 1;
-        float backLeftPower = backLeftDist.Map(0,30,0.01f,1) / 1;
+        float frontRightPower = frontRightDist.Map(0,20,0.01f,1) / 1;
+        float frontLeftPower = frontLeftDist.Map(0,20,0.01f,1) / 1;
+        float backRightPower = backRightDist.Map(0,20,0.01f,1) / 1;
+        float backLeftPower = backLeftDist.Map(0,20,0.01f,1) / 1;
         // throttlePower = frontDist.Map(0, 15, -0.3f, 1);
 
         HandleMovement((frontRightPower + backRightPower) - (frontLeftPower + backLeftPower));
@@ -66,5 +66,9 @@ public class DidabotController : MonoBehaviour
         //Rotate
         Quaternion wantedRotation = transform.rotation * Quaternion.Euler(Vector3.up * (boundRotation * turnSpeed * Time.deltaTime));
         rb.MoveRotation(wantedRotation);
+
+         if(transform.position.x > 30 || transform.position.x < -30 || transform.position.z > 30 || transform.position.z < -30){
+            transform.position = new Vector3(0,0,0);
+        }
     }
 }
