@@ -2,23 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-public class DidabotController : MonoBehaviour
+public class DidaBotController2 : MonoBehaviour
 {
-
-    
-    float speed = 20f;
-    float turnSpeed = 200f;
-
-    private Rigidbody rb;
     // Start is called before the first frame update
+    public Rigidbody rb;
+
+    public WheelCollider left;
+    public WheelCollider right;
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        
     }
 
     // Update is called once per frame
-    void Update()
+
+     void Update()
     {
         float frontRightDist = Raycast(45);
         float frontLeftDist = Raycast(-45);
@@ -33,7 +31,7 @@ public class DidabotController : MonoBehaviour
         float backLeftPower = backLeftDist.Map(0,30,0.01f,1) / 1;
         // throttlePower = frontDist.Map(0, 15, -0.3f, 1);
 
-        HandleMovement((frontRightPower + backRightPower) - (frontLeftPower + backLeftPower));
+        HandleMovement((frontRightPower + backRightPower), (frontLeftPower + backLeftPower));
     }
 
 
@@ -57,14 +55,9 @@ public class DidabotController : MonoBehaviour
     }
 
 
-    protected virtual void HandleMovement(float rotation){
-        float boundRotation = Mathf.Clamp(rotation, -1, 1);
-        //Movement
-        Vector3 wantedPosition = transform.position + (transform.forward * speed * Time.deltaTime);
-        rb.MovePosition(wantedPosition);
-
-        //Rotate
-        Quaternion wantedRotation = transform.rotation * Quaternion.Euler(Vector3.up * (boundRotation * turnSpeed * Time.deltaTime));
-        rb.MoveRotation(wantedRotation);
+    protected virtual void HandleMovement(float leftPower, float rightPower){
+         left.motorTorque = leftPower * 10;
+         right.motorTorque = rightPower * 10;
+       
     }
 }

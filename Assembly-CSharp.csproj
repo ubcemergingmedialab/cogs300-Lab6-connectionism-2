@@ -37,17 +37,19 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\Imports\PROMETEO - Car Controller\Scripts\CameraFollow.cs" />
+     <Compile Include="Assets\Scripts\DidabotController.cs" />
      <Compile Include="Assets\Scripts\JumpController.cs" />
      <Compile Include="Assets\Imports\PROMETEO - Car Controller\Scripts\PrometeoTouchInput.cs" />
      <Compile Include="Assets\Scripts\CarControlAPI.cs" />
      <Compile Include="Assets\Scripts\KartController.cs" />
      <Compile Include="Assets\Scripts\Setup\CameraMovement.cs" />
+     <Compile Include="Assets\Tank Controller\Tank_Inputs.cs" />
+     <Compile Include="Assets\HeadMovement.cs" />
      <Compile Include="Assets\Scripts\BallController.cs" />
      <Compile Include="Assets\ArmAgent.cs" />
-     <Compile Include="Assets\Imports\PROMETEO - Car Controller\Scripts\PrometeoCarController.cs" />
-     <Compile Include="Assets\Tank Controller\Tank_Inputs.cs" />
      <Compile Include="Assets\Tank Controller\Tank_Controller.cs" />
-     <Compile Include="Assets\Scripts\DidabotController.cs" />
+     <Compile Include="Assets\Imports\PROMETEO - Car Controller\Scripts\PrometeoCarController.cs" />
+     <Compile Include="Assets\Scripts\DidaBotController2.cs" />
      <None Include="Assets\Imports\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
      <None Include="Assets\Imports\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\Imports\TextMesh Pro\Resources\Fonts &amp; Materials\LiberationSans - OFL.txt" />

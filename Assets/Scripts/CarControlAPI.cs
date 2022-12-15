@@ -66,7 +66,6 @@ public class CarControlAPI : MonoBehaviour
                 
                 while(currDuration < delay){
                   currDuration += Time.deltaTime;
-                  Debug.Log(instructions[instructionIndex]);
                   controlScript.Turn((float)instructions[instructionIndex]);
                   yield return new WaitForSeconds(0.001f);
                 }
@@ -106,7 +105,7 @@ public class CarControlAPI : MonoBehaviour
 
         rightPower = rightDist.Map(0,20,0.01f,1) / 1;
         leftPower = leftDist.Map(0,20,0.01f,1) / 1;
-        throttlePower = frontDist.Map(0, 15, -0.3f, 1);
+        throttlePower = frontDist.Map(0, 15, -0.35f, 1);
 
         controlScript.GoForwardBackward(throttlePower);
 
