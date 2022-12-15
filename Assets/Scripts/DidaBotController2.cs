@@ -16,7 +16,7 @@ public class DidaBotController2 : MonoBehaviour
 
     // Update is called once per frame
 
-     void Update()
+     void FixedUpdate()
     {
         float frontRightDist = Raycast(45);
         float frontLeftDist = Raycast(-45);
@@ -54,10 +54,13 @@ public class DidaBotController2 : MonoBehaviour
         }
     }
 
+    
 
     protected virtual void HandleMovement(float leftPower, float rightPower){
          left.motorTorque = leftPower * 10;
          right.motorTorque = rightPower * 10;
+        
+
        
     }
 }
