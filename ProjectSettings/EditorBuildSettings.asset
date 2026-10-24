@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Demos/Didabots.unity
+    guid: bf18324b282db4449a43a7cc8f1a7bf6
   m_configObjects: {}
